@@ -109,7 +109,8 @@ messages = [
 ]
 ```
 
-> The model must support the chat template, otherwise it will not understand the role
+> The model must support the chat template, otherwise it will not understand the `role`, `content`. And we called the 
+> models which support chat template as `chat model`, and tools only works with `chat model`
 
 ## Install the packages
 
