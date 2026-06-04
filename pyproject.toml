@@ -1,0 +1,7 @@
+[project]
+name = "llama-py-tuto"
+version = "0.1.0"
+description = "This repos shows how to use llama-cpp-python api"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = ["llama-cpp-python"]
