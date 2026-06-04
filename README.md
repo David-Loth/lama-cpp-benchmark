@@ -1,8 +1,15 @@
 # llama_cpp_python
 
-In this repo, we learn how to use `llama_cpp_python` api to interact with `llama.cpp` backend locally.
+In this repo, we learn how to use `llama-cpp-python` api to interact with `llama.cpp` backend locally.
 
-## Install the dependencies
+You can visite the official [github repo](https://github.com/abetlen/llama-cpp-python) for more information.
+
+## introduction
+
+`llama-cpp-python` is one of the cleanest ways to run LLMs locally because it `binds directly to llama.cpp using ctypes`, 
+giving you bare-metal C/C++ performance right inside your Python ecosystem.
+
+## Install the packages
 
 Here, we suppose you are using debian 13 as OS.
 
@@ -19,10 +26,10 @@ Activate your virtual environment
 ```shell
 source path/to/venv/bin/activate
 
-pip install lama-cpp-python
+pip install llama-cpp-python
 
 # if you are using uv to handle your python project, go to your project root folder and run 
-uv pip install lama-cpp-python
+uv pip install llama-cpp-python
 
 # if you have nvidia gpu, you need to run
 CMAKE_ARGS="-DGGML_CUDA=on" uv pip install llama-cpp-python
@@ -31,3 +38,4 @@ CMAKE_ARGS="-DGGML_CUDA=on" uv pip install llama-cpp-python
 CMAKE_ARGS="-DGGML_CUDA=on" uv add llama-cpp-python
 
 ```
+
