@@ -9,6 +9,9 @@ You can visite the official [github repo](https://github.com/abetlen/llama-cpp-p
 `llama-cpp-python` is one of the cleanest ways to run LLMs locally because it `binds directly to llama.cpp using ctypes`, 
 giving you bare-metal C/C++ performance right inside your Python ecosystem.
 
+
+## Main features
+
 ### Model Initialization
 
 `Llama` class loads the `GGUF model into memory`, with the user provided configuration (e.g. n_gpu_layers, n_ctx, etc.)
@@ -21,8 +24,9 @@ from llama_cpp import Llama
 # Set n_gpu_layers to offload layers to your GPU (-1 offloads all layers), change to 0 if running purely on CPU
 Llama(
         model_path=model_path,
+        n_threads = 8 # based on your cpu number
         n_ctx=CONTEXT_WINDOW,
-        n_gpu_layers=0,  # 
+        n_gpu_layers=0, 
         embedding=True,  # change to True if you intend to use create_embedding()
         verbose=False  # Turn off to keep stdout clean, turn on for debugging speed
     )
@@ -74,6 +78,38 @@ The `embedding generation(llm.create_embedding)` converts a piece of text into a
 > The model must be loaded with embedding=True during initialization.
 > The use case is to `build Retrieval-Augmented Generation (RAG)`, semantic search, clustering, or building 
 > a local vector database pipeline.
+
+### chat completion vs raw_text completion
+
+- Raw text Completion:  generate text from a raw prompt string.
+- Chat Completion: generate text from a structured conversation (messages) using a chat template.
+
+Without chat template, user must write everything in the prompt, for example
+```python
+prompt = """
+You are a cybersecurity expert.
+
+User: Explain CVE.
+Assistant:
+"""
+```
+
+With chat template, you can use the below message
+
+```python
+messages = [
+    {
+        "role": "system",
+        "content": "You are a cybersecurity expert."
+    },
+    {
+        "role": "user",
+        "content": "Explain CVE."
+    }
+]
+```
+
+> The model must support the chat template, otherwise it will not understand the role
 
 ## Install the packages
 
