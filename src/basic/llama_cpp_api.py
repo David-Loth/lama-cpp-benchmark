@@ -4,9 +4,11 @@ from typing import Dict, List, Iterator
 from llama_cpp import Llama, CreateChatCompletionResponse, CreateChatCompletionStreamResponse, CreateCompletionResponse, \
     CreateCompletionStreamResponse, CreateEmbeddingResponse
 
+from conf.constant import CONTEXT_WINDOW, MODEL_PATH
+
+
 # Best Practice: Use constants or environment variables for configuration
-MODEL_PATH = os.getenv("MODEL_PATH", "C:/Users/pliu/Documents/tools/llama.cpp/models/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf")
-CONTEXT_WINDOW = 4096
+
 
 
 def initialize_llm(model_path: str) -> Llama:
