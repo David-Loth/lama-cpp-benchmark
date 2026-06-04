@@ -1,30 +1,31 @@
 """In this module, we learn the basic of llama cpp python api"""
 import os
-from typing import Any, Dict, Generator, List, Iterator
+from typing import Dict, List, Iterator
 from llama_cpp import Llama, CreateChatCompletionResponse, CreateChatCompletionStreamResponse, CreateCompletionResponse, \
     CreateCompletionStreamResponse, CreateEmbeddingResponse
 
 # Best Practice: Use constants or environment variables for configuration
-MODEL_PATH = os.getenv("MODEL_PATH", "/var/lib/llama-models/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf")
+MODEL_PATH = os.getenv("MODEL_PATH", "C:/Users/pliu/Documents/tools/llama.cpp/models/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf")
 CONTEXT_WINDOW = 4096
 
 
 def initialize_llm(model_path: str) -> Llama:
-    """Initializes and returns the Llama backend.
-
-    Best Practice:
-    - Always set n_ctx explicitly so you don't default to small limits.
-    - Set n_gpu_layers to offload layers to your GPU (-1 offloads all layers).
     """
+    Initializes and returns the Llama backend.
+    :param model_path: the path of the gguf model file
+    :return: the Llama backend
+    """
+
     if not os.path.exists(model_path):
         raise FileNotFoundError(
             f"Model not found at {model_path}. Please download the GGUF file first."
         )
-
+    # Always set n_ctx explicitly so you don't default to small limits.
+    # Set n_gpu_layers to offload layers to your GPU (-1 offloads all layers), change to 0 if running purely on CPU
     return Llama(
         model_path=model_path,
         n_ctx=CONTEXT_WINDOW,
-        n_gpu_layers=0,  # Change to 0 if running purely on CPU
+        n_gpu_layers=0,  #
         embedding=True,  # change to True if you intend to use create_embedding()
         verbose=False  # Turn off to keep stdout clean, turn on for debugging speed
     )
@@ -36,11 +37,13 @@ def initialize_llm(model_path: str) -> Llama:
 def run_chat_completion(
         llm: Llama,
         messages: List[Dict[str, str]],
-        stream: bool = False
-) -> Any:
-    """Handles conversational interactions using structural chat formats.
-
-    Use case: Conversational UI, agents, or role-based tasks.
+        stream: bool = False) ->  Iterator[CreateChatCompletionStreamResponse] | CreateChatCompletionResponse:
+    """
+    Handles conversational interactions using structural chat formats.
+    :param llm: target model
+    :param messages: user input prompt
+    :param stream: enable streaming mode or not
+    :return: when stream=true, the return type is CreateChatCompletionStreamResponse, otherwise is CreateChatCompletionResponse
     """
     # create_chat_completion mirrors the OpenAI format
     response: Iterator[CreateChatCompletionStreamResponse] | CreateChatCompletionResponse = llm.create_chat_completion(
@@ -56,9 +59,11 @@ def run_chat_completion(
 # Function 2: Raw Text Completion
 # =====================================================================
 def run_raw_completion(llm: Llama, prompt: str) -> str:
-    """Predicts next tokens from a raw string prompt.
-
-    Use case: Text transformation, code completion, or raw text generation.
+    """
+    Predicts next tokens from a raw string prompt.
+    :param llm: target model
+    :param prompt: user input prompt
+    :return: the model output text
     """
     # Best Practice: Clean trailing newlines from the prompt to prevent
     # immediate triggers on the stop=["\n"] condition.
@@ -82,9 +87,11 @@ def run_raw_completion(llm: Llama, prompt: str) -> str:
 # Function 3: Text Embeddings
 # =====================================================================
 def get_text_embedding(llm: Llama, text: str) -> List[float]:
-    """Generates numerical vector embeddings for a given text.
-
-    Use case: Semantic search or feeding into a vector database.
+    """
+    Generates numerical vector embeddings for a given text.
+    :param llm: target model
+    :param text: user input text
+    :return:
     """
     embedding_data: CreateEmbeddingResponse = llm.create_embedding(input=[text])
     return embedding_data["data"][0]["embedding"]
