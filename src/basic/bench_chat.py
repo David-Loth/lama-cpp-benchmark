@@ -18,7 +18,7 @@ def run_chat_completion_with_metrics(llm: Llama, messages: List[Dict[str, str]])
     # Request the stream
     stream_response = llm.create_chat_completion(
         messages=messages,
-        temperature=0.7,
+        temperature=0,
         max_tokens=512,
         stream=True
     )
@@ -62,6 +62,7 @@ def run_chat_completion_with_metrics(llm: Llama, messages: List[Dict[str, str]])
     return {
         "text": "".join(full_text),
         "total_tokens": token_count,
+        "gen_time": generation_time_seconds,
         "ttft_ms": ttft_seconds * 1000,  # Typically measured in milliseconds
         "tokens_per_second": tokens_per_second
     }
